@@ -1,7 +1,8 @@
 <pre>
 <?php
 
-require_once('topic_extractor.php');
+header('Location: view/');
+/*require_once('topic_extractor.php');
 require_once('analyzer.php');
 
 $qid='20070704130007AApBKjX';
@@ -29,7 +30,7 @@ foreach($data as $d) {
 	echo sprintf('<div>%s : %s</div>',$uid,$score*100);
 }
 
-if($con) mysql_close($con);
+if($con) mysql_close($con);*/
 
 /*$con=mysql_connect('localhost','root','retrograde');
 mysql_select_db('gyaanometer',$con);
