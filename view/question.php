@@ -33,16 +33,31 @@ $entities=get_topics($alz,0.1);
 </head>	
 	
 <body>
+	<h1><img src="../images/logo.png" /> for Yahoo! Answers</h1>
+	
 	<div id="left"></div>
 	<div id="middle">
 	<?php
 		echo sprintf('<h1>%s</h1>',$q['subject']);
-		echo sprintf('<h2>%s</h2>',$q['content']);
-		
+		echo sprintf('<h3>%s</h3>',$q['content']);
+		?>
+		<a href="index.php">Go Home</a>
+	<form action="post.php" method="post">
+	<textarea name="content"></textarea>
+	<br/>
+	<input type="hidden" name="qid" value="<?php echo $qid; ?>" />
+	<input type="submit" value="Post Answer" />
+	</form>
+		<?php
 		foreach($answers as $a) echo sprintf('<div class="ans">%s<br/><br/><i>by user %s</i><br/><br/><b><img src="../images/logo-resized.png" /> RatinG: %s%%</b></div>',$a['content'],$a['uid'],calculate_score($a['uid'],$entities)*100);
 	?>
 	</div>
 	<div id="right"></div>
 </body>	
-
+<br/><br/>
+<div>
+	<br/><br/>
+	<hr/>
+	<i>Designed By Moniods</i>
+</div>
 </html>

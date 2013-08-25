@@ -1,7 +1,24 @@
 <pre>
 <?php
+session_start();
 
-header('Location: view/');
+if(isset($_REQUEST['uid'])) {
+	$con=mysql_connect('localhost','root','retrograde');
+	mysql_select_db('gyaanometer',$con);
+	
+	$p=mysql_query(sprintf("select passwd from yahoo_user where uid='%s'",$_REQUEST['uid']),$con);
+	if($r=mysql_fetch_assoc($p)) {
+		$pass=$r['passwd'];
+		if($pass==$_REQUEST['pass']) $_SESSION['uid']=$_REQUEST['uid'];
+	}
+	
+	mysql_close($con);
+} else if(isset($_REQUEST['logout'])) {
+	session_destroy();
+}
+
+if(isset($_SESSION['uid'])) header('Location: view/');
+else header('Location: view/login.php');
 /*require_once('topic_extractor.php');
 require_once('analyzer.php');
 

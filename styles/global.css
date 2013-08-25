@@ -9,6 +9,24 @@ img {
 	vertical-align:middle;
 }
 
+input[type=text],input[type=password] {
+	border:none;
+	border-radius:5px;
+	height:30px;
+	width:150px;
+}
+
+input[type=submit] {
+	border-radius:5px;
+	height:30px;
+	margin:10px;
+}
+
+textarea {
+	width:30%;
+	height:70px;
+}
+
 a {
 	color:#EC0EF9;
 	text-decoration:none;

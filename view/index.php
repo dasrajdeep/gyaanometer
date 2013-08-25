@@ -1,3 +1,5 @@
+<?php session_start(); ?>
+
 <html>
 
 <head>
@@ -9,7 +11,8 @@
 <body>
 	<div id="header">
 		<h1 align="center"><img src="../images/logo.png"/> for Yahoo! Answers</h1>
-		<hr/>
+		
+		<a href="../index.php?logout=1">logout</a>
 		
 		<h2 align="center"><img src="../images/check.png"/></h2>
 		<div>
@@ -29,5 +32,10 @@
 		</div>
 	</div>
 </body>	
-
+<br/><br/>
+<div>
+	<br/><br/>
+	<hr/>
+	<i>Designed By Moniods</i>
+</div>
 </html>
