@@ -1,7 +1,7 @@
 <pre>
 <?php
 session_start();
-
+error_reporting(0);
 if(isset($_REQUEST['uid'])) {
 	$con=mysql_connect('localhost','root','retrograde');
 	mysql_select_db('gyaanometer',$con);

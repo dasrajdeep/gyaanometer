@@ -1,4 +1,4 @@
-<?php session_start(); ?>
+<?php session_start(); error_reporting(0); ?>
 
 <html>
 
@@ -31,6 +31,7 @@
 		</div>
 	</div>
 </body>	
+<div style="clear:both"></div>
 <br/><br/>
 <a href="../index.php?logout=1"><b>logout</b></a>
 <div>
