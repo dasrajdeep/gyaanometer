@@ -12,9 +12,8 @@
 	<div id="header">
 		<h1 align="center"><img src="../images/logo.png"/> for Yahoo! Answers</h1>
 		
-		<a href="../index.php?logout=1">logout</a>
-		
-		<h2 align="center"><img src="../images/check.png"/></h2>
+		<h2 align="center"><img src="../images/checkout.png"/></h2>
+		<br/>
 		<div>
 			<?php
 			
@@ -33,6 +32,7 @@
 	</div>
 </body>	
 <br/><br/>
+<a href="../index.php?logout=1"><b>logout</b></a>
 <div>
 	<br/><br/>
 	<hr/>

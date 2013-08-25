@@ -41,7 +41,6 @@ $entities=get_topics($alz,0.1);
 		echo sprintf('<h1>%s</h1>',$q['subject']);
 		echo sprintf('<h3>%s</h3>',$q['content']);
 		?>
-		<a href="index.php">Go Home</a>
 	<form action="post.php" method="post">
 	<textarea name="content"></textarea>
 	<br/>
@@ -55,6 +54,7 @@ $entities=get_topics($alz,0.1);
 	<div id="right"></div>
 </body>	
 <br/><br/>
+<a href="index.php"><b>Go Home</b></a>
 <div>
 	<br/><br/>
 	<hr/>
