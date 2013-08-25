@@ -29,47 +29,6 @@ function extract_named($text) {
 	return $named;
 }
 
-function extract_topics($posts) {
-	$Wq=10;
-	$Wa=1;
-	
-	$e=0.5;
-	
-	$named=array();
-	$p=$posts;
-	
-	foreach($p['answers'] as $a) foreach($a as $b) if(!in_array($b,$named)) $named[$b]=0; 
-	foreach($p['question'] as $b) if(!in_array($b,$named)) $named[$b]=0;
-	
-	foreach(array_keys($named) as $n) {
-		foreach($p['answers'] as $a) foreach($a as $b) if($n==$b) $named[$n]+=$Wa; 
-		foreach($p['question'] as $b) if($n==$b) $named[$n]+=$Wq; 
-	}
-	
-	$total=0;
-	foreach(array_values($named) as $v) $total+=$v;
-	
-	$ratios=array();
-	
-	//Compute ratios.
-	foreach(array_keys($named) as $k) $ratios[$k]=($total==0)?0:$named[$k]/$total;
-	
-	$result=array();
-	
-	$max=0;
-	$max_key='';
-	foreach(array_keys($ratios) as $r) if($ratios[$r]>$max) {
-		$max=$ratios[$r];
-		$max_key=$r;
-	}
-	
-	array_push($result,$max_key);
-	
-	foreach(array_keys($ratios) as $r) if(($max-$ratios[$r])<=$e) array_push($result,$r);
-	
-	return $result;
-}
-
 function content_analyze($text) {
 	$c=curl_init();
 	
@@ -86,7 +45,9 @@ function content_analyze($text) {
 	$entities=array();
 	$x=json_decode($result,true);
 	
-	if(!isset($x['error'])) foreach($x['query']['results']['entities']['entity'] as $e) {
+	if(isset($x['error'])) return null; 
+	
+	foreach($x['query']['results']['entities']['entity'] as $e) {
 		$key=$e['text']['content'];
 		$entities[$key]=$e['score'];
 	}
@@ -95,7 +56,6 @@ function content_analyze($text) {
 }
 
 function classify_topics($qid) {
-	$thres=0.1;
 	
 	$con=mysql_connect('localhost','root','retrograde');
 	mysql_select_db('gyaanometer',$con);
@@ -109,12 +69,16 @@ function classify_topics($qid) {
 	$answers=array();
 	while($r=mysql_fetch_assoc($p)) array_push($answers,$r['content']);
 	
+	//Analyze contents.
 	$topics=content_analyze(strtolower($question.implode(' ',$answers)));
+	
+	if(!$topics) return false;
 	$topics=array_filter($topics);
 	
-	if(count($topics)==0) return;
+	if(count($topics)==0) $topics=classify_named(strtolower($question.implode(' ',$answers)));
+	if(!$topics) return;
 	
-	$names=get_topics($topics,$thres);
+	$names=get_topics($topics,0.1);
 	
 	foreach($names as $t) @mysql_query(sprintf("insert into gyaanometer_topics (topic_name) values ('%s')",$t),$con);
 	
@@ -122,6 +86,8 @@ function classify_topics($qid) {
 	foreach($names as $t) mysql_query(sprintf($query,$t,$qid),$con);
 	
 	mysql_close($con);
+	
+	return true;
 }
 
 function get_topics($topics,$thres) {
@@ -130,6 +96,20 @@ function get_topics($topics,$thres) {
 	foreach(array_keys($topics) as $k) if(($topics[$k]-$max)<=$thres) array_push($names,$k);
 	
 	return $names;
+}
+
+function classify_named($text) {
+	$named=extract_named($text);
+	
+	if(count($named)==0) return null;
+	
+	$x=array_count_values($named);
+	arsort($x);
+	
+	$sum=array_sum(array_values($x));
+	foreach(array_keys($x) as $k) $x[$k]=$x[$k]/$sum;
+	
+	return $x;
 }
 
 ?>

@@ -4,18 +4,15 @@
 require_once('topic_extractor.php');
 require_once('analyzer.php');
 
-/*$qid='20070704130007AApBKjX';
+$qid='20070704130007AApBKjX';
 $uid='N3jTHU2Eaa';
 
-*/
 $con=mysql_connect('localhost','root','retrograde');
 mysql_select_db('gyaanometer',$con);
 
-$p=mysql_query(sprintf("select * from yahoo_answer where qid='20070704130007AApBKjX'"),$con);
+$p=mysql_query(sprintf("select uid,content from yahoo_answer where qid='20070704130007AApBKjX'"),$con);
 $data=array();
 while($r=mysql_fetch_assoc($p)) array_push($data,$r);
-//print_r($data);die();
-//echo $data[0]['q.content'].'<br/>';
 
 $text='';
 
@@ -23,26 +20,27 @@ foreach($data as $d) {
 	$text.=$d['content'];
 }
 
-$entities=get_topics(content_analyze($text),0.1);
+$alz=content_analyze($text);
+$entities=get_topics($alz,0.1);
 
 foreach($data as $d) {
 	$uid=$d['uid'];
 	$score=calculate_score($uid,$entities);
-	echo sprintf('<div>%s : %s</div>',$uid,$score);
+	echo sprintf('<div>%s : %s</div>',$uid,$score*100);
 }
 
-mysql_close($con);
+if($con) mysql_close($con);
 
 /*$con=mysql_connect('localhost','root','retrograde');
 mysql_select_db('gyaanometer',$con);
 
-$p=mysql_query("select qid from yahoo_question",$con);
+$p=mysql_query("select qid,count(*) as c from yahoo_answer group by qid having c>=7",$con);
 $qids=array();
 while($r=mysql_fetch_assoc($p)) array_push($qids,$r['qid']);
 	
 mysql_close($con);	
-	
-foreach($qids as $qid) classify_topics($qid);*/
+
+foreach($qids as $q) classify_topics($q);*/
 
 ?>
 </pre>
